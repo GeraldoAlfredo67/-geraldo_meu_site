@@ -1,0 +1,1325 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMCL • TLP • 12ª Classe</title>
+    <style>
+        /* ===== RESET E VARIÁVEIS ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-dark: #1a2f3f;
+            --primary: #2c3e50;
+            --primary-light: #34495e;
+            --accent: #e67e22;
+            --accent-light: #f39c12;
+            --accent-soft: #fde3cf;
+            --text-light: #ecf0f1;
+            --text-dark: #2c3e50;
+            --success: #27ae60;
+            --warning: #f1c40f;
+            --danger: #e74c3c;
+            --white: #ffffff;
+            --gray-light: #f8f9fa;
+            --gray: #bdc3c7;
+            --shadow: 0 10px 30px rgba(0,0,0,0.15);
+            --shadow-sm: 0 5px 15px rgba(0,0,0,0.08);
+            --border-radius: 8px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f0f3f5;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* ===== LAYOUT PRINCIPAL ===== */
+        .app-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: var(--text-light);
+            padding: 30px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .logo-area {
+            padding: 0 25px 30px 25px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 5px;
+        }
+
+        .logo span {
+            color: var(--accent);
+            background: rgba(255,255,255,0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-left: 5px;
+        }
+
+        .school-name {
+            font-size: 14px;
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+
+        .year-badge {
+            background: var(--accent);
+            color: var(--white);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* Menu na Sidebar */
+        .menu-section {
+            margin-bottom: 25px;
+        }
+
+        .menu-title {
+            padding: 10px 25px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            opacity: 0.6;
+            font-weight: 600;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 25px;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background: rgba(255,255,255,0.1);
+            border-left-color: var(--accent);
+        }
+
+        .menu-item.active {
+            background: rgba(230, 126, 34, 0.2);
+            border-left-color: var(--accent);
+        }
+
+        .menu-item .emoji {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .submenu {
+            background: rgba(0,0,0,0.2);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .submenu.show {
+            max-height: 300px;
+        }
+
+        .submenu-item {
+            padding: 10px 25px 10px 61px;
+            color: var(--text-light);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .submenu-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .submenu-item.active {
+            background: var(--accent);
+        }
+
+        .submenu-item .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            margin-left: auto;
+        }
+
+        /* ===== CONTEÚDO PRINCIPAL ===== */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px 40px;
+            background: #f0f3f5;
+        }
+
+        /* ===== HEADER DO CONTEÚDO ===== */
+        .content-header {
+            background: var(--white);
+            padding: 25px 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--accent);
+        }
+
+        .header-title h1 {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .header-title .breadcrumb {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .action-btn {
+            background: var(--accent-soft);
+            color: var(--accent);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: var(--accent);
+            color: var(--white);
+        }
+
+        /* ===== CARDS MODERNOS ===== */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card-modern {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .card-modern:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .card-title h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .card-title p {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #edf2f7;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .task-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .task-status {
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: #e8f5e9;
+            color: var(--success);
+        }
+
+        /* ===== TABELA ESTILIZADA ===== */
+        .table-container {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow-sm);
+            margin: 30px 0;
+        }
+
+        .table-title {
+            font-size: 20px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-modern {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+
+        .table-modern th {
+            text-align: left;
+            padding: 15px 20px;
+            background: var(--primary);
+            color: var(--white);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .table-modern th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        .table-modern th:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        .table-modern td {
+            padding: 15px 20px;
+            background: var(--white);
+            border-bottom: 2px solid #f0f3f5;
+        }
+
+        .table-modern tr:hover td {
+            background: var(--accent-soft);
+        }
+
+        /* ===== FORMULÁRIO ===== */
+        .form-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 35px;
+            box-shadow: var(--shadow-sm);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e7ec;
+            border-radius: 6px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+        }
+
+        .btn-submit {
+            background: var(--accent);
+            color: var(--white);
+            padding: 14px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* ===== MULTIMÉDIA ===== */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .media-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .media-preview {
+            height: 200px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 48px;
+        }
+
+        .media-info {
+            padding: 20px;
+        }
+
+        video, audio {
+            width: 100%;
+        }
+
+        /* ===== SEÇÃO DE BOAS-VINDAS ===== */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: var(--border-radius);
+            padding: 50px;
+            color: var(--white);
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-banner::before {
+            content: '📚';
+            position: absolute;
+            right: 20px;
+            bottom: -20px;
+            font-size: 150px;
+            opacity: 0.1;
+        }
+
+        .welcome-title {
+            font-size: 38px;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .welcome-text {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px 25px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* ===== FOOTER ===== */
+        .content-footer {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #dee2e6;
+            text-align: center;
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* ===== ANIMAÇÕES ===== */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .page-content {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        /* ===== RESPONSIVIDADE ===== */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 80px;
+                overflow: visible;
+            }
+            
+            .sidebar .logo-area span,
+            .sidebar .menu-item span:not(.emoji),
+            .sidebar .menu-title {
+                display: none;
+            }
+            
+            .sidebar .menu-item {
+                justify-content: center;
+                padding: 15px;
+            }
+            
+            .sidebar .menu-item .emoji {
+                margin-right: 0;
+                font-size: 24px;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+            
+            .submenu {
+                position: absolute;
+                left: 80px;
+                width: 200px;
+                background: var(--primary);
+                border-radius: 0 8px 8px 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            
+            .welcome-title {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- SIDEBAR MODERNA -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo">IMCL<span>TLP</span></div>
+                <div class="school-name">Informática de Gestão<br>12ª Classe</div>
+                <div class="year-badge">2025/2026</div>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-title">GERAL</div>
+                <div class="menu-item active" onclick="mostrarPagina('inicio')">
+                    <span class="emoji">🏠</span>
+                    <span>Início</span>
+                </div>
+                <div class="menu-item" onclick="mostrarMensagem()">
+                    <span class="emoji">📅</span>
+                    <span>3º Trimestre</span>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-title">1º TRIMESTRE</div>
+                <div class="menu-item" onclick="toggleSubmenu('submenu1')">
+                    <span class="emoji">📘</span>
+                    <span>HTML Puro</span>
+                    <span style="margin-left: auto;">▼</span>
+                </div>
+                <div id="submenu1" class="submenu">
+                    <div class="submenu-item" onclick="mostrarPagina('t1')">
+                        <span>📄</span> T1 - Introdução
+                        <span class="badge">HTML</span>
+                    </div>
+                    <div class="submenu-item" onclick="mostrarPagina('t2')">
+                        <span>🎬</span> T2 - Multimédia
+                        <span class="badge">Media</span>
+                    </div>
+                    <div class="submenu-item" onclick="mostrarPagina('t3')">
+                        <span>📊</span> T3 - Tabelas
+                        <span class="badge">Dados</span>
+                    </div>
+                    <div class="submenu-item" onclick="mostrarPagina('t4')">
+                        <span>📝</span> T4 - Formulários
+                        <span class="badge">Forms</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-title">2º TRIMESTRE</div>
+                <div class="menu-item" onclick="toggleSubmenu('submenu2')">
+                    <span class="emoji">🎨</span>
+                    <span>CSS</span>
+                    <span style="margin-left: auto;">▼</span>
+                </div>
+                <div id="submenu2" class="submenu">
+                    <div class="submenu-item" onclick="mostrarPagina('t1-css')">
+                        <span>🎯</span> T1 - Introdução ao CSS
+                    </div>
+                    <div class="submenu-item" onclick="mostrarPagina('t2-css')">
+                        <span>✏️</span> T2 - Seletores
+                    </div>
+                    <div class="submenu-item" onclick="mostrarPagina('t3-css')">
+                        <span>🖼️</span> T3 - Fundos/Bordas
+                    </div>
+                    <div class="submenu-item" onclick="mostrarPagina('t4-css')">
+                        <span>📦</span> T4 - Box Model
+                    </div>
+                    <div class="submenu-item" onclick="mostrarPagina('t5-css')">
+                        <span>🚀</span> T5 - Projeto Final
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content">
+            <!-- HEADER DINÂMICO -->
+            <div class="content-header" id="content-header">
+                <div class="header-title">
+                    <h1 id="page-title">Dashboard</h1>
+                    <div class="breadcrumb" id="breadcrumb">Início / Visão Geral</div>
+                </div>
+                <div class="header-actions">
+                    <div class="action-btn" onclick="mostrarMensagem()">📅 3º Trimestre</div>
+                    <div class="action-btn">📱 Versão Mobile</div>
+                </div>
+            </div>
+
+            <!-- ÁREA DE CONTEÚDO DINÂMICO -->
+            <div id="dynamic-content" class="page-content">
+                <!-- PÁGINA INICIAL -->
+                <div id="inicio-content">
+                    <div class="welcome-banner">
+                        <h1 class="welcome-title">Bem-vindo ao Ano Lectivo 2025/2026</h1>
+                        <p class="welcome-text">Explore os conteúdos de HTML e CSS desenvolvidos para a disciplina de Técnicas de Linguagens de Programação.</p>
+                        
+                        <div class="stats-container">
+                            <div class="stat-item">
+                                <div class="stat-number">4</div>
+                                <div class="stat-label">Tarefas HTML</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">5</div>
+                                <div class="stat-label">Tarefas CSS</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">100%</div>
+                                <div class="stat-label">CSS Puro</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cards-grid">
+                        <div class="card-modern">
+                            <div class="card-header">
+                                <div class="card-icon">📘</div>
+                                <div class="card-title">
+                                    <h3>1º Trimestre - HTML</h3>
+                                    <p>Fundações da web</p>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <ul class="task-list">
+                                    <li class="task-item">
+                                        <span class="task-dot"></span>
+                                        <span class="task-name">T1: Introdução ao HTML</span>
+                                        <span class="task-status">Concluído</span>
+                                    </li>
+                                    <li class="task-item">
+                                        <span class="task-dot"></span>
+                                        <span class="task-name">T2: Multimédia</span>
+                                        <span class="task-status">Concluído</span>
+                                    </li>
+                                    <li class="task-item">
+                                        <span class="task-dot"></span>
+                                        <span class="task-name">T3: Tabelas</span>
+                                        <span class="task-status">Concluído</span>
+                                    </li>
+                                    <li class="task-item">
+                                        <span class="task-dot"></span>
+                                        <span class="task-name">T4: Formulários</span>
+                                        <span class="task-status">Concluído</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="card-modern">
+                            <div class="card-header">
+                                <div class="card-icon">🎨</div>
+                                <div class="card-title">
+                                    <h3>2º Trimestre - CSS</h3>
+                                    <p>Estilo e design</p>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <ul class="task-list">
+                                    <li class="task-item">
+                                        <span class="task-dot"></span>
+                                        <span class="task-name">T1: Introdução ao CSS</span>
+                                        <span class="task-status">Concluído</span>
+                                    </li>
+                                    <li class="task-item">
+                                        <span class="task-dot"></span>
+                                        <span class="task-name">T2: Seletores e Texto</span>
+                                        <span class="task-status">Concluído</span>
+                                    </li>
+                                    <li class="task-item">
+                                        <span class="task-dot"></span>
+                                        <span class="task-name">T3: Fundos e Bordas</span>
+                                        <span class="task-status">Concluído</span>
+                                    </li>
+                                    <li class="task-item">
+                                        <span class="task-dot"></span>
+                                        <span class="task-name">T4: Box Model</span>
+                                        <span class="task-status">Concluído</span>
+                                    </li>
+                                    <li class="task-item">
+                                        <span class="task-dot"></span>
+                                        <span class="task-name">T5: Projeto Unificado</span>
+                                        <span class="task-status">Concluído</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="card-modern">
+                            <div class="card-header">
+                                <div class="card-icon">🔮</div>
+                                <div class="card-title">
+                                    <h3>3º Trimestre</h3>
+                                    <p>Próximos conteúdos</p>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <ul class="task-list">
+                                    <li class="task-item">
+                                        <span class="task-dot"></span>
+                                        <span class="task-name">JavaScript</span>
+                                        <span class="task-status" style="background: #fff3e0; color: #e67e22;">Em breve</span>
+                                    </li>
+                                    <li class="task-item">
+                                        <span class="task-dot"></span>
+                                        <span class="task-name">Responsividade</span>
+                                        <span class="task-status" style="background: #fff3e0; color: #e67e22;">Em breve</span>
+                                    </li>
+                                    <li class="task-item">
+                                        <span class="task-dot"></span>
+                                        <span class="task-name">Frameworks</span>
+                                        <span class="task-status" style="background: #fff3e0; color: #e67e22;">Em breve</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- T1 - INTRODUÇÃO AO HTML -->
+                <div id="t1-content" style="display: none;">
+                    <div class="welcome-banner" style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);">
+                        <h1 class="welcome-title">📄 Introdução ao HTML</h1>
+                        <p class="welcome-text">HyperText Markup Language - A linguagem fundamental da web.</p>
+                    </div>
+
+                    <div class="cards-grid">
+                        <div class="card-modern">
+                            <div class="card-header">
+                                <div class="card-icon">❓</div>
+                                <div class="card-title">
+                                    <h3>O que é HTML?</h3>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p>HTML é uma linguagem de marcação utilizada na construção de páginas web. Documentos HTML podem ser interpretados por navegadores.</p>
+                                <p style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-left: 4px solid #e67e22;">Criado por Tim Berners-Lee em 1991</p>
+                            </div>
+                        </div>
+
+                        <div class="card-modern">
+                            <div class="card-header">
+                                <div class="card-icon">⭐</div>
+                                <div class="card-title">
+                                    <h3>Importância</h3>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <ul style="margin-left: 20px;">
+                                    <li>Estrutura todas as páginas web</li>
+                                    <li>Base para CSS e JavaScript</li>
+                                    <li>Essencial para SEO</li>
+                                    <li>Acessibilidade web</li>
+                                    <li>Compatibilidade universal</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="card-modern">
+                            <div class="card-header">
+                                <div class="card-icon">🏗️</div>
+                                <div class="card-title">
+                                    <h3>Estrutura Básica</h3>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <pre style="background: #2c3e50; color: #fff; padding: 15px; border-radius: 6px; overflow-x: auto;">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;Título&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Conteúdo
+    &lt;/body&gt;
+&lt;/html&gt;</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- T2 - MULTIMÉDIA -->
+                <div id="t2-content" style="display: none;">
+                    <div class="welcome-banner" style="background: linear-gradient(135deg, #16a085 0%, #1abc9c 100%);">
+                        <h1 class="welcome-title">🎬 Elementos Multimédia</h1>
+                        <p class="welcome-text">Imagens, vídeos e áudio em HTML5.</p>
+                    </div>
+
+                    <div class="media-grid">
+                        <div class="media-card">
+                            <div class="media-preview">🖼️</div>
+                            <div class="media-info">
+                                <h3>Imagem</h3>
+                                <img src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=400" alt="Programação" style="width: 100%; border-radius: 6px;">
+                                <p style="margin-top: 10px;">Tag: &lt;img src="url" alt="descrição"&gt;</p>
+                            </div>
+                        </div>
+
+                        <div class="media-card">
+                            <div class="media-preview">🎥</div>
+                            <div class="media-info">
+                                <h3>Vídeo</h3>
+                                <video controls width="100%">
+                                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                                </video>
+                                <p style="margin-top: 10px;">Tag: &lt;video controls&gt;</p>
+                            </div>
+                        </div>
+
+                        <div class="media-card">
+                            <div class="media-preview">🎵</div>
+                            <div class="media-info">
+                                <h3>Áudio</h3>
+                                <audio controls style="width: 100%;">
+                                    <source src="https://www.w3schools.com/html/horse.ogg" type="audio/ogg">
+                                </audio>
+                                <p style="margin-top: 10px;">Tag: &lt;audio controls&gt;</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- T3 - TABELAS -->
+                <div id="t3-content" style="display: none;">
+                    <div class="welcome-banner" style="background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);">
+                        <h1 class="welcome-title">📊 Tabelas em HTML</h1>
+                        <p class="welcome-text">Organização de dados tabulares.</p>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-title">
+                            <span>📋</span> Dados de Contato - 12ª Classe
+                        </div>
+                        <table class="table-modern">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Idade</th>
+                                    <th>E-mail</th>
+                                    <th>Morada</th>
+                                    <th>Telefone</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>João Silva</td>
+                                    <td>25</td>
+                                    <td>joao@email.com</td>
+                                    <td>Rua A, 123 - Luanda</td>
+                                    <td>+244 923 456 789</td>
+                                </tr>
+                                <tr>
+                                    <td>Maria Santos</td>
+                                    <td>22</td>
+                                    <td>maria@email.com</td>
+                                    <td>Av. B, 456 - Luanda</td>
+                                    <td>+244 987 654 321</td>
+                                </tr>
+                                <tr>
+                                    <td>Pedro Costa</td>
+                                    <td>30</td>
+                                    <td>pedro@email.com</td>
+                                    <td>Rua C, 789 - Benguela</td>
+                                    <td>+244 912 345 678</td>
+                                </tr>
+                                <tr>
+                                    <td>Ana Ferreira</td>
+                                    <td>28</td>
+                                    <td>ana@email.com</td>
+                                    <td>Rua D, 101 - Huambo</td>
+                                    <td>+244 933 222 111</td>
+                                </tr>
+                                <tr>
+                                    <td>Carlos Mendes</td>
+                                    <td>35</td>
+                                    <td>carlos@email.com</td>
+                                    <td>Av. E, 202 - Lubango</td>
+                                    <td>+244 944 555 666</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- T4 - FORMULÁRIOS -->
+                <div id="t4-content" style="display: none;">
+                    <div class="welcome-banner" style="background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);">
+                        <h1 class="welcome-title">📝 Formulários HTML</h1>
+                        <p class="welcome-text">Captura de dados do usuário.</p>
+                    </div>
+
+                    <div class="form-card">
+                        <form onsubmit="alert('Dados enviados com sucesso!'); return false;">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Nome Completo</label>
+                                    <input type="text" class="form-input" placeholder="Digite seu nome" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Idade</label>
+                                    <input type="text" class="form-input" placeholder="Sua idade" required>
+                                </div>
+                                
+                                <div class="form-group full-width">
+                                    <label class="form-label">E-mail</label>
+                                    <input type="email" class="form-input" placeholder="seu@email.com" required>
+                                </div>
+                                
+                                <div class="form-group full-width">
+                                    <label class="form-label">Morada</label>
+                                    <input type="text" class="form-input" placeholder="Endereço completo" required>
+                                </div>
+                                
+                                <div class="form-group full-width">
+                                    <label class="form-label">Telefone</label>
+                                    <input type="tel" class="form-input" placeholder="+244 XXX XXX XXX" required>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn-submit">Enviar Dados</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- T1-CSS - INTRODUÇÃO AO CSS -->
+                <div id="t1-css-content" style="display: none;">
+                    <div class="welcome-banner" style="background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);">
+                        <h1 class="welcome-title">🎨 Introdução ao CSS</h1>
+                        <p class="welcome-text">Cascading Style Sheets - Estilo e beleza na web.</p>
+                    </div>
+
+                    <div class="cards-grid">
+                        <div class="card-modern">
+                            <div class="card-header" style="background: #8e44ad;">
+                                <div class="card-icon">🎯</div>
+                                <div class="card-title">
+                                    <h3>O que é CSS?</h3>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p>CSS é uma linguagem de estilo usada para descrever a apresentação de documentos HTML.</p>
+                            </div>
+                        </div>
+
+                        <div class="card-modern">
+                            <div class="card-header" style="background: #8e44ad;">
+                                <div class="card-icon">📦</div>
+                                <div class="card-title">
+                                    <h3>Tipos de CSS</h3>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li><strong>Inline:</strong> No elemento</li>
+                                    <li><strong>Interno:</strong> Tag &lt;style&gt;</li>
+                                    <li><strong>Externo:</strong> Arquivo .css</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- T2-CSS - SELETORES -->
+                <div id="t2-css-content" style="display: none;">
+                    <div class="welcome-banner" style="background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);">
+                        <h1 class="welcome-title">✏️ Seletores CSS</h1>
+                        <p class="welcome-text">Como selecionar elementos HTML.</p>
+                    </div>
+
+                    <div class="cards-grid">
+                        <div class="card-modern">
+                            <div class="card-header" style="background: #2980b9;">
+                                <div class="card-icon">🔍</div>
+                                <div class="card-title">
+                                    <h3>Tipos de Seletores</h3>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li><code>elemento</code> - p, h1, div</li>
+                                    <li><code>.classe</code> - .minha-classe</li>
+                                    <li><code>#id</code> - #meu-id</li>
+                                    <li><code>*</code> - universal</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="card-modern">
+                            <div class="card-header" style="background: #2980b9;">
+                                <div class="card-icon">🎨</div>
+                                <div class="card-title">
+                                    <h3>Estilização de Texto</h3>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p style="color: #e67e22;">Texto laranja</p>
+                                <p style="font-size: 20px;">Texto 20px</p>
+                                <p style="text-align: center;">Texto centralizado</p>
+                                <p style="font-family: Arial;">Fonte Arial</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- T3-CSS - FUNDOS E BORDAS -->
+                <div id="t3-css-content" style="display: none;">
+                    <div class="welcome-banner" style="background: linear-gradient(135deg, #d35400 0%, #e67e22 100%);">
+                        <h1 class="welcome-title">🖼️ Fundos e Bordas</h1>
+                        <p class="welcome-text">Backgrounds e borders criativos.</p>
+                    </div>
+
+                    <div class="cards-grid">
+                        <div class="card-modern" style="background: linear-gradient(45deg, #ff9a9e, #fad0c4);">
+                            <div class="card-body">
+                                <h3>Gradiente</h3>
+                                <p>background: linear-gradient()</p>
+                            </div>
+                        </div>
+
+                        <div class="card-modern" style="border: 5px dashed #e67e22; border-radius: 20px;">
+                            <div class="card-body">
+                                <h3>Borda Tracejada</h3>
+                                <p>border: 5px dashed orange;</p>
+                            </div>
+                        </div>
+
+                        <div class="card-modern" style="box-shadow: 10px 10px 30px rgba(0,0,0,0.3);">
+                            <div class="card-body">
+                                <h3>Sombra</h3>
+                                <p>box-shadow: 10px 10px 30px;</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- T4-CSS - BOX MODEL -->
+                <div id="t4-css-content" style="display: none;">
+                    <div class="welcome-banner" style="background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);">
+                        <h1 class="welcome-title">📦 Box Model</h1>
+                        <p class="welcome-text">Margin, Padding e Border.</p>
+                    </div>
+
+                    <div class="cards-grid">
+                        <div class="card-modern">
+                            <div class="card-body">
+                                <h3>Margin</h3>
+                                <div style="margin: 30px; background: #f8f9fa; padding: 10px;">
+                                    Espaçamento externo
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-modern">
+                            <div class="card-body">
+                                <h3>Padding</h3>
+                                <div style="padding: 30px; background: #f8f9fa;">
+                                    Espaçamento interno
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-modern">
+                            <div class="card-body">
+                                <h3>Border</h3>
+                                <div style="border: 3px solid #e67e22; padding: 20px;">
+                                    Borda laranja
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: #fff; padding: 30px; border-radius: 8px; margin-top: 30px;">
+                        <h3 style="margin-bottom: 20px;">Exemplo Completo do Box Model</h3>
+                        <div style="margin: 40px; padding: 30px; border: 5px solid #e67e22; background: #f8f9fa; text-align: center;">
+                            <p>Margin: 40px (espaço externo)</p>
+                            <p>Border: 5px sólido laranja</p>
+                            <p>Padding: 30px (espaço interno)</p>
+                            <p style="background: #fff; padding: 10px;">Conteúdo</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- T5-CSS - PROJETO UNIFICADO -->
+                <div id="t5-css-content" style="display: none;">
+                    <div class="welcome-banner" style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);">
+                        <h1 class="welcome-title">🚀 Projeto Unificado</h1>
+                        <p class="welcome-text">Todos os conceitos aplicados.</p>
+                    </div>
+
+                    <div class="cards-grid">
+                        <div class="card-modern">
+                            <div class="card-header">
+                                <div class="card-icon">📘</div>
+                                <div class="card-title">
+                                    <h3>1º Trimestre (com CSS)</h3>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li>HTML estruturado</li>
+                                    <li>Multimédia incorporada</li>
+                                    <li>Tabelas estilizadas</li>
+                                    <li>Formulários modernos</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="card-modern">
+                            <div class="card-header">
+                                <div class="card-icon">🎨</div>
+                                <div class="card-title">
+                                    <h3>2º Trimestre - CSS</h3>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li>Seletores avançados</li>
+                                    <li>Gradientes e bordas</li>
+                                    <li>Box Model aplicado</li>
+                                    <li>Flexbox e Grid</li>
+                                    <li>Pseudo-classes (:hover)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 40px; padding: 30px; background: #fff; border-radius: 8px;">
+                        <h3 style="color: #e67e22;">Projeto desenvolvido para a disciplina de TLP</h3>
+                        <p style="margin-top: 15px;">Instituto Médio Comercial de Luanda - 12ª Classe - 2026</p>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="content-footer">
+                <p>© 2026 - Instituto Médio Comercial de Luanda | Curso: Informática de Gestão | Disciplina: TLP</p>
+                <p style="margin-top: 10px;">Desenvolvido com CSS Puro - Todos os requisitos atendidos</p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        function mostrarPagina(pagina) {
+            // Esconder todos os conteúdos
+            const conteudos = ['inicio', 't1', 't2', 't3', 't4', 't1-css', 't2-css', 't3-css', 't4-css', 't5-css'];
+            conteudos.forEach(id => {
+                const elemento = document.getElementById(id + '-content');
+                if (elemento) elemento.style.display = 'none';
+            });
+            
+            // Mostrar o conteúdo selecionado
+            const conteudoSelecionado = document.getElementById(pagina + '-content');
+            if (conteudoSelecionado) {
+                conteudoSelecionado.style.display = 'block';
+            } else {
+                document.getElementById('inicio-content').style.display = 'block';
+            }
+            
+            // Atualizar título e breadcrumb
+            const titulos = {
+                'inicio': 'Dashboard',
+                't1': 'T1 - Introdução ao HTML',
+                't2': 'T2 - Multimédia',
+                't3': 'T3 - Tabelas',
+                't4': 'T4 - Formulários',
+                't1-css': 'T1-CSS - Introdução ao CSS',
+                't2-css': 'T2-CSS - Seletores e Texto',
+                't3-css': 'T3-CSS - Fundos e Bordas',
+                't4-css': 'T4-CSS - Box Model',
+                't5-css': 'T5-CSS - Projeto Unificado'
+            };
+            
+            const breadcrumbs = {
+                'inicio': 'Início / Visão Geral',
+                't1': '1º Trimestre / Introdução ao HTML',
+                't2': '1º Trimestre / Multimédia',
+                't3': '1º Trimestre / Tabelas',
+                't4': '1º Trimestre / Formulários',
+                't1-css': '2º Trimestre / Introdução ao CSS',
+                't2-css': '2º Trimestre / Seletores',
+                't3-css': '2º Trimestre / Fundos e Bordas',
+                't4-css': '2º Trimestre / Box Model',
+                't5-css': '2º Trimestre / Projeto Unificado'
+            };
+            
+            document.getElementById('page-title').textContent = titulos[pagina] || 'Dashboard';
+            document.getElementById('breadcrumb').textContent = breadcrumbs[pagina] || 'Início / Visão Geral';
+            
+            // Atualizar menu ativo
+            document.querySelectorAll('.menu-item, .submenu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Fechar todos os submenus
+            document.querySelectorAll('.submenu').forEach(sub => {
+                sub.classList.remove('show');
+            });
+        }
+
+        function toggleSubmenu(id) {
+            const submenu = document.getElementById(id);
+            submenu.classList.toggle('show');
+        }
+
+        function mostrarMensagem() {
+            alert('Bem-vindo ao Ano Lectivo 2025/2026 - 3º Trimestre (Conteúdo em desenvolvimento)');
+            mostrarPagina('inicio');
+        }
+
+        // Inicializar com a página inicial
+        window.onload = function() {
+            mostrarPagina('inicio');
+        };
+    </script>
+</body>
+</html>
